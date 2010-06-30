@@ -163,7 +163,7 @@ set_screen_state(int on)
 {
     QEMU_FALLBACK(set_screen_state(on));
 
-    //LOGI("*** set_screen_state %d", on);
+    LOGI("*** set_screen_state %d", on);
 
     initialize_fds();
 
@@ -174,10 +174,16 @@ set_screen_state(int on)
 
     char buf[32];
     int len;
-    if(on)
+    if(on) {
+        system("echo everlife > /sys/power/wake_unlock");
+        system("echo 4 > /sys/devices/system/cpu/cpu0/op");
         len = sprintf(buf, on_state);
-    else
+    }
+    else {
+        system("echo everlife > /sys/power/wake_lock");
+        system("echo 1 > /sys/devices/system/cpu/cpu0/op");
         len = sprintf(buf, off_state);
+    }
     len = write(g_fds[REQUEST_STATE], buf, len);
     if(len < 0) {
         LOGE("Failed setting last user activity: g_error=%d\n", g_error);
