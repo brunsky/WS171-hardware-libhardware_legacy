@@ -175,13 +175,15 @@ set_screen_state(int on)
     char buf[32];
     int len;
     if(on) {
-        system("echo everlife > /sys/power/wake_unlock");
         system("echo 4 > /sys/devices/system/cpu/cpu0/op");
+        system("echo 0 > /sys/class/backlight/pxa3xx_pwm_bl/bl_power");
+        //system("echo everlife > /sys/power/wake_unlock");
         len = sprintf(buf, on_state);
     }
     else {
-        system("echo everlife > /sys/power/wake_lock");
-        system("echo 1 > /sys/devices/system/cpu/cpu0/op");
+        //system("echo everlife > /sys/power/wake_lock");
+        //system("echo 1 > /sys/class/backlight/pxa3xx_pwm_bl/bl_power");
+        //system("echo 1 > /sys/devices/system/cpu/cpu0/op");
         len = sprintf(buf, off_state);
     }
     len = write(g_fds[REQUEST_STATE], buf, len);
